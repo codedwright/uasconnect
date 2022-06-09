@@ -1,0 +1,55 @@
+#https://www.youtube.com/watch?v=nuZp8qYti2M
+#https://yosi-pramajaya.medium.com/deploying-laravel-on-aws-ecs-9e0278226699
+#https://www.c-sharpcorner.com/article/deploy-a-dockerized-laravel-application-to-aws-ecs-with-ec2-instance-launch-type/
+#if you want everything cross-platform
+#docker run --rm -v ${PWD}:/app composer require laravel/breeze --dev
+#docker-compose exec app php artisan migrate
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: uasconnect-app
+    container_name: app
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_PASSWORD: root
+      SESSION_DRIVER: redis
+      REDIS_HOST: redis
+    volumes:
+      - ./:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile_Nginx
+    image: uasconnect-nginx
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./config/nginx/conf.d/:/etc/nginx/conf.d
+    depends_on:
+      - app
+
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - dbdata:/var/lib/mysql/
+
+  redis:
+    image: redis:latest
+    container_name: redis
+
+volumes:
+  dbdata:
+    driver: local
