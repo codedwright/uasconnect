@@ -35,8 +35,13 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-      - name: Directory Permissions
-        run: chmod -R 777 ./
+      - name: Validate composer
+        run: |
+          composer validate
+
+      - name: Install dependencies
+        run: |
+          composer install --optimize-autoloader --prefer-dist --no-progress --no-suggest
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
