@@ -57,13 +57,13 @@ jobs:
           IMAGE_TAG: latest
         run: |
           docker-compose build
-          docker tag larvel-nginx:latest $ECR_REGISTRY/larvel-nginx:$IMAGE_TAG
-          docker tag larvel-app:latest $ECR_REGISTRY/larvel-app:$IMAGE_TAG
-          docker push $ECR_REGISTRY/larvel-nginx:$IMAGE_TAG
-          docker push $ECR_REGISTRY/larvel-app:$IMAGE_TAG
+          docker tag uasconnect-nginx:latest $ECR_REGISTRY/uasconnect-nginx:$IMAGE_TAG
+          docker tag uasconnect-app:latest $ECR_REGISTRY/uasconnect-app:$IMAGE_TAG
+          docker push $ECR_REGISTRY/uasconnect-nginx:$IMAGE_TAG
+          docker push $ECR_REGISTRY/uasconnect-app:$IMAGE_TAG
           echo "setting output values"
-          echo "::set-output name=appimage::$ECR_REGISTRY/larvel-app:$IMAGE_TAG"
-          echo "::set-output name=webimage::$ECR_REGISTRY/larvel-nginx:$IMAGE_TAG"
+          echo "::set-output name=appimage::$ECR_REGISTRY/uasconnect-app:$IMAGE_TAG"
+          echo "::set-output name=webimage::$ECR_REGISTRY/uasconnect-nginx:$IMAGE_TAG"
 
       # Runs a single command using the runners shell
       - name: Print the image name
