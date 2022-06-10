@@ -1,17 +1,17 @@
 #https://www.youtube.com/watch?v=nuZp8qYti2M
 #https://yosi-pramajaya.medium.com/deploying-laravel-on-aws-ecs-9e0278226699
-#https://www.c-sharpcorner.com/article/deploy-a-dockerized-laravel-application-to-aws-ecs-with-ec2-instance-launch-type/
+# https://www.c-sharpcorner.com/article/deploy-a-dockerized-laravel-uasconnect-application-to-aws-ecs-with-ec2-instance-launch-type/
 #if you want everything cross-platform
-#docker run --rm -v ${PWD}:/app composer require laravel/breeze --dev
-#docker-compose exec app php artisan migrate
+#docker run --rm -v ${PWD}:/uasconnect-app composer require laravel/breeze --dev
+#docker-compose exec uasconnect-app php artisan migrate
 version: "3"
 services:
-  app:
+  uasconnect-app:
     build:
       context: .
       dockerfile: Dockerfile
     image: uasconnect-app
-    container_name: app
+    container_name: uasconnect-app
     restart: unless-stopped
     environment:
       DB_HOST: db
@@ -22,12 +22,12 @@ services:
       - ./:/var/www
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
-  webserver:
+  uasconnect-nginx:
     build:
       context: .
       dockerfile: Dockerfile_Nginx
     image: uasconnect-nginx
-    container_name: webserver
+    container_name: uasconnect-nginx
     restart: unless-stopped
     ports:
       - "8080:80"
@@ -35,7 +35,7 @@ services:
       - ./:/var/www
       - ./config/nginx/conf.d/:/etc/nginx/conf.d
     depends_on:
-      - app
+      - uasconnect-app
 
   db:
     image: mysql:5.7.22
