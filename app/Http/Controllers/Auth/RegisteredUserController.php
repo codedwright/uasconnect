@@ -37,6 +37,8 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'regex:/(.*)@(codedwright|tsico)\.com/i', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'email.regex' => 'The email must belong to UAS Connect'
         ]);
 
         $user = User::create([
